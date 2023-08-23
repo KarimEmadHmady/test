@@ -96,7 +96,7 @@ section .content-color{
     left: 50%;
     transform: translate(-50% , -50%);
     z-index: 3;
-    width: 200px;
+    width: 150px;
     height: 30%;
     animation: up-down 2s infinite alternate;
     transition: 1s;
