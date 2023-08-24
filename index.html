@@ -2,28 +2,38 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>chenge background color</title>
     <link rel="stylesheet" href="styles.css">
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@10..48,200;10..48,300;10..48,400;10..48,500;10..48,600&family=Preahvihear&display=swap" rel="stylesheet">
 </head>
 <body>
-<div class="concat" id="concat">
-    <section>
-    <img class="logo" src="img/Marmorino-logo.png" alt="">
-        <img class="img-2" src="img/New Project.png" >
-    <div class="content-color">
-        <div class="a-1 vv" data-color="#d40808">#d40808</div>
-        <div class="a-1 cc" data-color="#222">#222</div>
-        <div class="a-1 ww" data-color="#a5d823">#a5d823</div>
-        <div class="a-1 wd" data-color="#220cca">#220cca</div>
-        <div class="a-1 wa" data-color="#d40968">#d40968</div>
-        <div class="a-1 wg" data-color="#38d508">#38d508</div>
-        <div class="a-1 wg" data-color="#5d5f09">#5d5f09</div>
-        <div class="a-1 wb" data-color="#02cde8">#02cde8</div>
-        <div class="a-1 wn" data-color="#005693">#005693</div>
+    <div class="container">
+        <div class="content">
+            <div class="text">
+                <h2 id="product-title">Cristallo</h2>
+                <p id="product-description">Opaque decorative paint for indoors, with fine silver glitter and metallic pigments to create an iridescent and brilliant coating.</p><br>
+                <!-- <a href="#"></a> -->
+            </div>
+            <div class="img">
+                <img class="imgj cold" id="product-image-1" src="0.jpg">
+                <img class="imgj consirn" id="product-image-2" src="6.png">
+            </div>
+        </div>
+        <div class="icons">
+            <img onclick="updateProduct('Cristallo', 'Easy to apply, it is applied with a brush without a handle in irregular semi-circular movements.', '0.jpg', '#b5b3b4')" src="0.jpg">
+            <img onclick="updateProduct('Cristallo', 'The decorated walls will be uniform in colour but pleasantly enlivened by the special reflections of light and the irregularity of the sand arranged on the wall. ', '1.jpg', '#b6ac9c')" src="1.jpg">
+            <img onclick="updateProduct('Cristallo', 'The sandblasted effect produced on the wall creates smoother areas that alternate with rougher areas.', '2.jpg', '#edba8f')" src="2.jpg">
+            <img onclick="updateProduct('Cristallo', ' In the most sandy areas, the metallic reflections will be more visible.', '3.jpg', '#c8cccd')" src="3.jpg">
+            <img onclick="updateProduct('Cristallo', 'Cristallo is a decorative paint with a warm and embracing character, for walls with a strong personality but delicate elegance. Beautiful decorative effects can be achieved in a wide range of colours.', '4.jpg', '#6eceef')" src="4.jpg">
+            <!-- Add more product images here -->
+        </div>
     </div>
-    </section>
-</div>
+
+
     <script src="script.js"></script>
 </body>
 </html>
