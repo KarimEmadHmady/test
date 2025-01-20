@@ -1,0 +1,2564 @@
+<Style>
+
+
+body{
+  margin: 0;
+  padding: 0; 
+  box-sizing: border-box;
+  background-color:#000a14 ;
+  color: #eee;
+  
+}
+
+#btn-twtr{
+  clear:both;
+  color:#fff;
+  border:2px solid;
+  border-radius:3px;
+  text-align:center;
+  text-decoration:none;
+  display:block;
+  font-family:sans-serif;
+  font-size:14px;
+  width:13em;
+  padding:5px 10px;
+  font-weight:600;
+  position:absolute;
+  top:0;
+  right:10%;
+  margin:90vh 0;
+  background:rgba(0,0,0,0.2);
+  box-shadow:0 0 0px 3px rgba(0,0,0,0.2);
+  opacity:0.3
+}#btn-twtr:hover{color:#fff;opacity:1 ; }
+@media (max-width:650px) {
+#space {
+  width: 100%;
+  height: 70%;
+}
+}
+</Style>
+
+<style>
+  :root {
+  --pov: 66deg;
+  --day: 14s;
+  --sun-orbit-progress: .7;
+  --bg-color: #111;
+  --orbit-sphere-color: hsl(231, 93%, 40%);
+  --orbit-line-color: hsl(224, 86%, 44%);
+
+  --orbit-line-thickness: calc(.1rem + .09dvmin);
+  --orbit-plane-color: radial-gradient(
+    circle at center,
+    hsla(250, 70%, 75%, .025),
+    hsla(250, 70%, 75%, .1)
+  );
+  --moon-orbit-size: 12dvmin;
+  --mercury-orbit-size: 24dvmin;
+  --venus-orbit-size: 36dvmin;
+  --sun-orbit-size: 48dvmin;
+  --mars-orbit-size: 60dvmin;
+  --jupiter-orbit-size: 72dvmin;
+  --saturn-orbit-size: 84dvmin;
+  --stars-orbit-size: 96dvmin;
+  --number-of-bodies: 10;
+  --circle-delay: calc(var(--day) / 3.97);
+  --circular-ease: cubic-bezier(.37, 0, .63, 1);
+}
+
+:nth-child(1 of :is(.orbit)) { --i: 0; }
+:nth-child(2 of :is(.orbit)) { --i: 1; }
+:nth-child(3 of :is(.orbit)) { --i: 2; }
+:nth-child(4 of :is(.orbit)) { --i: 3; }
+:nth-child(5 of :is(.orbit)) { --i: 4; }
+:nth-child(6 of :is(.orbit)) { --i: 5; }
+:nth-child(7 of :is(.orbit)) { --i: 6; }
+:nth-child(8 of :is(.orbit)) { --i: 7; }
+
+:nth-child(1 of :is(.body, .body-container)) { --i: 0; }
+:nth-child(2 of :is(.body, .body-container)) { --i: 1; }
+:nth-child(3 of :is(.body, .body-container)) { --i: 2; }
+:nth-child(4 of :is(.body, .body-container)) { --i: 3; }
+:nth-child(5 of :is(.body, .body-container)) { --i: 4; }
+:nth-child(6 of :is(.body, .body-container)) { --i: 5; }
+:nth-child(7 of :is(.body, .body-container)) { --i: 6; }
+:nth-child(8 of :is(.body, .body-container)) { --i: 7; }
+:nth-child(9 of :is(.body, .body-container)) { --i: 8; }
+:nth-child(10 of :is(.body, .body-container)) { --i: 9; }
+
+:nth-child(1 of :is(.body-container.galaxy .arm)) { --i: 0; }
+:nth-child(2 of :is(.body-container.galaxy .arm)) { --i: 1; }
+
+
+
+.universe {
+
+  perspective: 50000px;
+  translate: 0 -5%;
+  position: relative;
+}
+
+/* orbit line */
+.orbit {
+  --enter-delay: calc(.1s + var(--i) * (1s / 6));
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--size, 30dvmin);
+  height: var(--size, 30dvmin);
+  border-radius: 50%;
+  background: var(--orbit-plane-color);
+  box-shadow: 0 0 0 var(--orbit-line-thickness) var(--orbit-line-color);
+  transform-style: preserve-3d;
+  rotate: x var(--pov);
+  translate: -50% -40%;
+  opacity: 0;
+  -webkit-animation: orbit-appear 1.5s var(--enter-delay, .1s) forwards;
+          animation: orbit-appear 1.5s var(--enter-delay, .1s) forwards;
+}
+
+@-webkit-keyframes orbit-appear {
+  to {
+    opacity: 1;
+    translate: -50% -50%;
+  }
+}
+
+@keyframes orbit-appear {
+  to {
+    opacity: 1;
+    translate: -50% -50%;
+  }
+}
+
+/* orbit semi-sphere */
+.orbit::after {
+  --cutout: calc(var(--size) / 2 + var(--orbit-line-thickness));
+  content: "";
+  position: absolute;
+  top: -75%;
+  left: calc(-1 * var(--orbit-line-thickness));
+  width: calc(100% + var(--orbit-line-thickness) * 2);
+  height: 250%;
+  background: radial-gradient(
+    circle var(--cutout) at center,
+    #0000 99.9%,
+    var(--orbit-sphere-color)
+  );
+  border-radius: 50%;
+  -webkit-clip-path: polygon(0 50%, 100% 50%, 100% 100%, 0 100%);
+          clip-path: polygon(0 50%, 100% 50%, 100% 100%, 0 100%);
+}
+
+.orbit.moon {
+  --size: var(--moon-orbit-size);
+}
+
+.orbit.mercury {
+  --size: var(--mercury-orbit-size);
+}
+
+.orbit.venus {
+  --size: var(--venus-orbit-size);
+}
+
+.orbit.sun {
+  --size: var(--sun-orbit-size);
+}
+
+.orbit.mars {
+  --size: var(--mars-orbit-size);
+}
+
+.orbit.jupiter {
+  --size: var(--jupiter-orbit-size);
+}
+
+.orbit.saturn {
+  --size: var(--saturn-orbit-size);
+}
+
+.orbit.stars {
+  --size: var(--stars-orbit-size);
+  --orbit-sphere-color: hsla(226, 88%, 20%, 0.6);
+  --orbit-line-color: hsl(226, 98%, 49%);
+}
+
+.orbit.stars .star {
+  --size: 8dvmin;
+  --astronomical-unit: calc(
+    var(--stars-orbit-size) / 2 -
+    (var(--y) * var(--y)) * 14dvmin
+  );
+  --star-x-delay: calc(var(--j) * -.5s);
+  content: "";
+  position: absolute;
+  z-index: 1;
+  bottom: -8%;
+  left: calc(50% + var(--astronomical-unit));
+  width: calc(var(--size) * cos(var(--pov)));
+  height: var(--size);
+  background: #fff0ea99;
+  mix-blend-mode: color-dodge;
+  -webkit-clip-path: polygon(
+    50% 0,
+    55% 45%,
+    100% 50%,
+    55% 55%,
+    50% 100%,
+    45% 55%,
+    0% 50%,
+    45% 45%
+  );
+          clip-path: polygon(
+    50% 0,
+    55% 45%,
+    100% 50%,
+    55% 55%,
+    50% 100%,
+    45% 55%,
+    0% 50%,
+    45% 45%
+  );
+  translate: -50% calc(-50% + var(--y) * 800%);
+  rotate: x calc(var(--y) * 80deg);
+  scale:
+    calc(1 - var(--y) / 1.5)
+    calc(1 - var(--y) / 2);
+  transform-style: preserve-3d;
+  -webkit-animation:
+    star-rise-and-shine
+      var(--day)
+      var(--star-x-delay)
+      infinite,
+    star-move-x
+      var(--day)
+      var(--star-x-delay)
+      infinite var(--circular-ease),
+    star-move-y
+      var(--day)
+      calc(0s - var(--circle-delay) + var(--star-x-delay))
+      infinite var(--circular-ease);
+          animation:
+    star-rise-and-shine
+      var(--day)
+      var(--star-x-delay)
+      infinite,
+    star-move-x
+      var(--day)
+      var(--star-x-delay)
+      infinite var(--circular-ease),
+    star-move-y
+      var(--day)
+      calc(0s - var(--circle-delay) + var(--star-x-delay))
+      infinite var(--circular-ease);
+}
+
+@-webkit-keyframes star-rise-and-shine {
+  from, 52%, to {
+    opacity: 0;
+  }
+  60%, 93% {
+    opacity: 1;
+  }
+  63%, 67%, 71%, 76%, 81%, 86%, 91% {
+    opacity: 1;
+  }
+  61%, 65%, 69%, 73%, 78%, 83%, 89% {
+    opacity: max(.3, sin(var(--j)));
+  }
+}
+
+@keyframes star-rise-and-shine {
+  from, 52%, to {
+    opacity: 0;
+  }
+  60%, 93% {
+    opacity: 1;
+  }
+  63%, 67%, 71%, 76%, 81%, 86%, 91% {
+    opacity: 1;
+  }
+  61%, 65%, 69%, 73%, 78%, 83%, 89% {
+    opacity: max(.3, sin(var(--j)));
+  }
+}
+
+@-webkit-keyframes star-move-x {
+  from, to {
+    transform: rotateY(-70deg);
+  }
+  50% {
+    transform: rotateY(70deg);
+    left: calc(50% - var(--astronomical-unit));
+  }
+}
+
+@keyframes star-move-x {
+  from, to {
+    transform: rotateY(-70deg);
+  }
+  50% {
+    transform: rotateY(70deg);
+    left: calc(50% - var(--astronomical-unit));
+  }
+}
+
+@-webkit-keyframes star-move-y {
+  50% {
+    bottom: calc(50% + var(--astronomical-unit) * cos(var(--pov)));
+  }
+}
+
+@keyframes star-move-y {
+  50% {
+    bottom: calc(50% + var(--astronomical-unit) * cos(var(--pov)));
+  }
+}
+
+.body, .body-container {
+  --inner-orbit: 0;
+  --orbit-progress: 0;
+  --sunlight-delay: calc(var(--sun-orbit-progress) * var(--day) * -1);
+  --orbit-delay: calc(var(--orbit-progress) * var(--day) * -1);
+  --inverse-index: calc(var(--number-of-bodies) - var(--i));
+  --shine-delay: calc(
+    (var(--sunlight-delay) + var(--orbit-delay)) -
+    (var(--day) * var(--inner-orbit))
+  );
+  --anim-body-reveal: body-reveal
+    1.5s
+    calc(1s + .09s * var(--i))
+    forwards;
+  --anim-body-index: body-index
+    var(--day)
+    var(--orbit-delay)
+    infinite;
+  --anim-body-shine: body-shine
+    var(--day)
+    var(--shine-delay)
+    linear infinite;
+  --anim-body-move-x: body-move-x
+    var(--day)
+    var(--orbit-delay)
+    infinite var(--circular-ease);
+  --anim-body-move-y: body-move-y
+    var(--day)
+    calc(var(--orbit-delay) - var(--circle-delay))
+    infinite var(--circular-ease);
+  position: absolute;
+  left: calc(50% + var(--astronomical-unit));
+  top: 0;
+  opacity: 0;
+  translate: -50% calc(-50% - (50% * sin(var(--pov))));
+  width: var(--size);
+  height: var(--size);
+  background: radial-gradient(
+    circle at center,
+    var(--color-1, darkgray),
+    var(--color-2, #333) 60%
+  );
+  background-size: 300%;
+  background-position: center;
+  border-radius: 50%;
+  -webkit-animation:
+    var(--anim-body-reveal),
+    var(--anim-body-index),
+    var(--anim-body-shine),
+    var(--anim-body-move-x),
+    var(--anim-body-move-y);
+          animation:
+    var(--anim-body-reveal),
+    var(--anim-body-index),
+    var(--anim-body-shine),
+    var(--anim-body-move-x),
+    var(--anim-body-move-y);
+}
+
+@-webkit-keyframes body-reveal {
+  to {
+    top: calc(50% + var(--astronomical-unit) * cos(var(--pov)));
+    opacity: 1;
+  }
+}
+
+@keyframes body-reveal {
+  to {
+    top: calc(50% + var(--astronomical-unit) * cos(var(--pov)));
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes body-index {
+  from, 49% {
+    z-index: var(--inverse-index);
+  }
+  50%, to {
+    z-index: 0;
+  }
+}
+
+@keyframes body-index {
+  from, 49% {
+    z-index: var(--inverse-index);
+  }
+  50%, to {
+    z-index: 0;
+  }
+}
+
+@-webkit-keyframes body-shine {
+  to {
+    background-position-x: -100%;
+  }
+}
+
+@keyframes body-shine {
+  to {
+    background-position-x: -100%;
+  }
+}
+
+@-webkit-keyframes body-move-x {
+  50% {
+    left: calc(50% - var(--astronomical-unit));
+  }
+}
+
+@keyframes body-move-x {
+  50% {
+    left: calc(50% - var(--astronomical-unit));
+  }
+}
+
+@-webkit-keyframes body-move-y {
+  50% {
+    top: calc(50% - var(--astronomical-unit) * cos(var(--pov)));
+  }
+}
+
+@keyframes body-move-y {
+  50% {
+    top: calc(50% - var(--astronomical-unit) * cos(var(--pov)));
+  }
+}
+
+.body-container.earth,
+.body-container.moon,
+.body-container.mercury,
+.venus {
+  --inner-orbit: 1;
+}
+
+.body-container.earth {
+/*   --size: 4dvmin;
+  --color-1: #67aecb;
+  --color-2: mediumblue; */
+  color: transparent;
+  --astronomical-unit: 0%;
+
+  -webkit-animation:
+    var(--anim-body-reveal),
+    var(--anim-body-index),
+    var(--anim-body-shine),
+    earth-night
+      var(--day)
+      var(--shine-delay)
+      linear infinite;
+          animation:
+    var(--anim-body-reveal),
+    var(--anim-body-index),
+    var(--anim-body-shine),
+    earth-night
+      var(--day)
+      var(--shine-delay)
+      linear infinite;
+      z-index: 999;
+}
+
+@-webkit-keyframes earth-night {
+  50% {
+    box-shadow: inset 0 0 var(--size) calc(var(--size) / 5) #000b;
+  }
+}
+
+@keyframes earth-night {
+  50% {
+    box-shadow: inset 0 0 var(--size) calc(var(--size) / 5) #000b;
+  }
+}
+
+.body-container.earth .human-lights {
+  --color: #fc07;
+  --dim-color: #fc04;
+  --px: .6em;
+  --light: 0 var(--px) var(--color);
+  --dim-light: 0 var(--px) var(--dim-color);
+  --this-mad-city: 0 var(--px) #DB709388;
+  font-size: calc(var(--size) / 50);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: block;
+  width: 1em;
+  height: 1em;
+  translate: -50% -50%;
+  border-radius: 50%;
+  opacity: 0;
+  mix-blend-mode: difference;
+  box-shadow:
+    -5em -16em var(--light),
+    -4em -15em var(--light),
+    -3em -16em var(--light),
+    -5em -14em var(--dim-light),
+    -6em -13em var(--dim-light),
+    -3em -14em var(--dim-light),
+    -2em -13em var(--light),
+    -1em -18em var(--light),
+    -1em -16em var(--light),
+    -2em -16em var(--dim-light),
+    1em -15em var(--light),
+    0em -15em var(--dim-light),
+    2em -15em var(--dim-light),
+    4em -14em var(--light),
+    8em -11em var(--dim-light),
+    6em -12em var(--this-mad-city),
+    8em -8em var(--light),
+    7em -5em var(--light),
+    4em -19em var(--dim-light),
+    8em -17em var(--light),
+    1em -13em var(--dim-light),
+    8em -6em var(--dim-light),
+    4em -4em var(--light),
+    17em -10em var(--light),
+    19em -7em var(--dim-light),
+    -1em -4em var(--light),
+    2em -4em var(--dim-light),
+    6em -1em var(--dim-light),
+    5em -3em var(--dim-light),
+    6em 1em var(--light);
+  -webkit-animation:
+    earth-human-lights
+      var(--day)
+      var(--shine-delay)
+      linear infinite;
+          animation:
+    earth-human-lights
+      var(--day)
+      var(--shine-delay)
+      linear infinite;
+}
+
+@-webkit-keyframes earth-human-lights {
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes earth-human-lights {
+  50% {
+    opacity: 1;
+  }
+}
+
+.body-container.earth::before,
+.body-container.earth::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+
+/* continent */
+.body-container.earth::before {
+  translate: -45% -40%;
+  width: 3px;
+  height: 3px;
+
+}
+
+/* clouds */
+.body-container.earth::after {
+  width: 3px;
+  height: 3px;
+  translate: -50% -50%;
+  border-radius: 50%;
+  background:
+    repeating-radial-gradient(
+      circle at 50% 0%,
+      #fff4 3%,
+      #fff4 10%,
+      #0000 11%,
+      #0000 40%,
+      #fff4 60%,
+      #0000 80%,
+      #0000 100%
+    ),
+    repeating-radial-gradient(
+      ellipse
+      calc(var(--size) / 1.5)
+      calc(var(--size) / 6)
+      at 30% 90%,
+      #fff4,
+      #fffa 1%,
+      transparent 3%,
+      #fff9 5%,
+      transparent 7%,
+      #fff4 9%,
+      transparent 11%,
+      transparent 100%
+    );
+  background-size: 200% 100%;
+  background-position: right center;
+  filter: blur(.1dvmin);
+  mix-blend-mode: hard-light;
+  -webkit-animation:
+    earth-clouds
+      calc(var(--day) * 3.1)
+      linear infinite;
+          animation:
+    earth-clouds
+      calc(var(--day) * 3.1)
+      linear infinite;
+}
+
+@-webkit-keyframes earth-clouds {
+  to {
+    background-position-x: -100%;
+  }
+}
+
+@keyframes earth-clouds {
+  to {
+    background-position-x: -100%;
+  }
+}
+
+.body-container.moon {
+  --size: 2dvmin;
+  --color-1: #eee;
+  --color-2: #333;
+  --astronomical-unit: calc(var(--moon-orbit-size) / 2);
+  --orbit-progress: .2;
+  overflow: hidden;
+}
+
+.body-container.moon .crater {
+  position: absolute;
+  top: var(--y);
+  left: var(--x);
+  z-index: 1;
+  translate: 0 -50%;
+  width: calc(var(--size) * 100%);
+  height: calc(var(--size) * 100%);
+  background: #0003;
+  transform-style: preserve-3d;
+  transform-origin: left center;
+  rotate: x calc(90deg - var(--pov));
+  border-radius: 50%;
+  box-shadow:
+    .1dvmin .1dvmin .1dvmin #fff7,
+    -.1dvmin -.1dvmin .1dvmin #0009;
+  -webkit-animation:
+    moon-crater
+    var(--day)
+    calc(var(--day) / -2.2)
+    linear infinite;
+          animation:
+    moon-crater
+    var(--day)
+    calc(var(--day) / -2.2)
+    linear infinite;
+}
+
+@-webkit-keyframes moon-crater {
+  from {
+    z-index: 1;
+    transform:
+      translateX(
+        calc(1 / var(--size) * -100%)
+      )
+      rotateY(-90deg);
+  }
+  99.9% {
+    z-index: 1;
+    transform:
+      translateX(
+        calc(1 / var(--size) * 100%)
+      )
+      rotateY(90deg);
+  }
+  to {
+    z-index: 0;
+  }
+}
+
+@keyframes moon-crater {
+  from {
+    z-index: 1;
+    transform:
+      translateX(
+        calc(1 / var(--size) * -100%)
+      )
+      rotateY(-90deg);
+  }
+  99.9% {
+    z-index: 1;
+    transform:
+      translateX(
+        calc(1 / var(--size) * 100%)
+      )
+      rotateY(90deg);
+  }
+  to {
+    z-index: 0;
+  }
+}
+
+.body-container.moon .crater-1 {
+  --size: .3;
+  --x: 30%;
+  --y: 20%;
+}
+
+.body-container.moon .crater-2 {
+  --size: .2;
+  --x: 66%;
+  --y: 55%;
+}
+
+.body-container.moon .crater-3 {
+  --size: .15;
+  --x: 55%;
+  --y: 40%;
+}
+
+.body-container.moon .crater-4 {
+  --size: .25;
+  --x: 27%;
+  --y: 50%;
+}
+
+.body-container.moon .crater-5 {
+  --size: .1;
+  --x: 60%;
+  --y: 70%;
+}
+
+.body-container.moon .crater-6 {
+  --size: .1;
+  --x: 20%;
+  --y: 40%;
+}
+
+.body-container.mercury {
+  --size: 2dvmin;
+  --color-1: #eed;
+  --color-2: #443;
+  --astronomical-unit: calc(var(--mercury-orbit-size) / 2);
+  --orbit-progress: .35;
+  overflow: hidden;
+}
+
+.body-container.mercury .crater {
+  position: absolute;
+  top: var(--y);
+  left: var(--x);
+  z-index: 1;
+  rotate: x calc(90deg - var(--pov));
+  translate: 0 -50%;
+  transform-style: preserve-3d;
+  transform-origin: left center;
+  width: calc(var(--size) * 100%);
+  height: calc(var(--size) * 100%);
+  background: #fff7;
+  border-radius: 50%;
+  box-shadow: inset 0 0 .2dvmin .02dvmin #0006;
+  -webkit-animation:
+    mercury-crater
+    var(--day)
+    calc(var(--day) / -2)
+    linear infinite;
+          animation:
+    mercury-crater
+    var(--day)
+    calc(var(--day) / -2)
+    linear infinite;
+}
+
+@-webkit-keyframes mercury-crater {
+  from {
+    z-index: 1;
+    transform:
+      translateX(
+        calc(1 / var(--size) * -100%)
+      )
+      rotateY(-90deg);
+  }
+  99.9% {
+    z-index: 1;
+    transform:
+      translateX(
+        calc(1 / var(--size) * 100%)
+      )
+      rotateY(90deg);
+  }
+  to {
+    z-index: 0;
+  }
+}
+
+@keyframes mercury-crater {
+  from {
+    z-index: 1;
+    transform:
+      translateX(
+        calc(1 / var(--size) * -100%)
+      )
+      rotateY(-90deg);
+  }
+  99.9% {
+    z-index: 1;
+    transform:
+      translateX(
+        calc(1 / var(--size) * 100%)
+      )
+      rotateY(90deg);
+  }
+  to {
+    z-index: 0;
+  }
+}
+
+.body-container.mercury .crater-1 {
+  --size: .1;
+  --x: 35%;
+  --y: 21%;
+}
+
+.body-container.mercury .crater-2 {
+  --size: .15;
+  --x: 68%;
+  --y: 35%;
+}
+
+.body-container.mercury .crater-3 {
+  --size: .17;
+  --x: 50%;
+  --y: 42%;
+}
+
+.body-container.mercury .crater-4 {
+  --size: .12;
+  --x: 22%;
+  --y: 75%;
+}
+
+.body-container.mercury .crater-5 {
+  --size: .2;
+  --x: 37%;
+  --y: 53%;
+}
+
+.body-container.mercury .crater-6 {
+  --size: .16;
+  --x: 17%;
+  --y: 79%;
+}
+
+.body-container.mercury .crater-7 {
+  --size: .13;
+  --x: 18%;
+  --y: 23%;
+}
+
+.body-container.mercury .crater-8 {
+  --size: .17;
+  --x: 83%;
+  --y: 38%;
+}
+
+.body-container.mercury .crater-9 {
+  --size: .11;
+  --x: 60%;
+  --y: 18%;
+}
+
+.body-container.mercury .crater-10 {
+  --size: .1;
+  --x: 42%;
+  --y: 70%;
+}
+
+.body-container.mercury .crater-11 {
+  --size: .14;
+  --x: 75%;
+  --y: 65%;
+}
+
+.body-container.mercury .crater-12 {
+  --size: .2;
+  --x: 86%;
+  --y: 60%;
+}
+
+.body-container.mercury .crater-13 {
+  --size: .15;
+  --x: 76%;
+  --y: 73%;
+}
+
+.body-container.mercury .crater-14 {
+  --size: .14;
+  --x: 20%;
+  --y: 50%;
+}
+
+.body-container.mercury .crater-15 {
+  --size: .17;
+  --x: 27%;
+  --y: 22%;
+}
+
+.body-container.mercury .crater-16 {
+  --size: .11;
+  --x: 16%;
+  --y: 73%;
+}
+
+.body.venus {
+  --size: 4dvmin;
+  --color-1: #eed;
+  --color-2: #553;
+  --astronomical-unit: calc(var(--venus-orbit-size) / 2);
+  --orbit-progress: .3;
+}
+
+.body.sun {
+  --size: 6dvmin;
+  --color-1: #fb3;
+  --color-2: yellow;
+  --astronomical-unit: calc(var(--sun-orbit-size) / 2);
+  --orbit-progress: var(--sun-orbit-progress);
+  box-shadow:
+    0 0 1dvmin .2dvmin #ffd,
+    0 0 3dvmin 1dvmin #fa3;
+  -webkit-animation:
+    var(--anim-body-reveal),
+    var(--anim-body-index),
+    var(--anim-body-move-x),
+    var(--anim-body-move-y);
+          animation:
+    var(--anim-body-reveal),
+    var(--anim-body-index),
+    var(--anim-body-move-x),
+    var(--anim-body-move-y);
+}
+
+.body-container.mars {
+  --size: 3dvmin;
+  --color-1: darkorange;
+  --color-2: #750;
+  --astronomical-unit: calc(var(--mars-orbit-size) / 2);
+  --orbit-progress: .6;
+  overflow: hidden;
+}
+
+.body-container.mars .ice-cap {
+  position: absolute;
+  width: calc(var(--size) / 2.5);
+  height: calc(var(--size) / 2.5);
+  top: 0;
+  left: 50%;
+  translate: -50% -40%;
+  rotate: x var(--pov);
+  background: radial-gradient(
+    circle at center,
+    #fff8,
+    transparent
+  );
+  mix-blend-mode: overlay;
+  border-radius: 50%;
+  -webkit-clip-path: polygon(
+    0 0,
+    30% 0,
+    32% 40%,
+    34% 0,
+    60% 0,
+    82% 60%,
+    84% 5%,
+    90% 25%,
+    70% 27%,
+    88% 30%,
+    95% 70%,
+    60% 71%,
+    93% 76%,
+    100% 100%,
+    66% 66%,
+    33% 90%,
+    0 100%
+  );
+          clip-path: polygon(
+    0 0,
+    30% 0,
+    32% 40%,
+    34% 0,
+    60% 0,
+    82% 60%,
+    84% 5%,
+    90% 25%,
+    70% 27%,
+    88% 30%,
+    95% 70%,
+    60% 71%,
+    93% 76%,
+    100% 100%,
+    66% 66%,
+    33% 90%,
+    0 100%
+  );
+  -webkit-animation:
+    mars-ice-cap
+    var(--day)
+    linear infinite;
+          animation:
+    mars-ice-cap
+    var(--day)
+    linear infinite;
+}
+
+@-webkit-keyframes mars-ice-cap {
+  to {
+    transform: rotate(-1turn);
+  }
+}
+
+@keyframes mars-ice-cap {
+  to {
+    transform: rotate(-1turn);
+  }
+}
+
+.body-container.mars::before,
+.body-container.mars::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  filter: blur(1.33dvmin);
+  background: #1a1300ff;
+  mix-blend-mode: hard-light;
+  -webkit-animation:
+    mars-surface
+    var(--day)
+    linear infinite;
+          animation:
+    mars-surface
+    var(--day)
+    linear infinite;
+}
+
+@-webkit-keyframes mars-surface {
+  from {
+    transform: translateX(-200%);
+  }
+  to {
+    transform: translateX(200%);
+  }
+}
+
+@keyframes mars-surface {
+  from {
+    transform: translateX(-200%);
+  }
+  to {
+    transform: translateX(200%);
+  }
+}
+
+.body-container.mars::before {
+  translate: -10% -20%;
+  width: calc(var(--size) / 3.5);
+  height: calc(var(--size) / 1.8);
+  -webkit-clip-path: polygon(
+    5% 19%,
+    32% 32%,
+    65% 39%,
+    83% 38%,
+    98% 48%,
+    90% 65%,
+    78% 64%,
+    66% 77%,
+    56% 69%,
+    47% 67%,
+    32% 72%,
+    19% 76%,
+    8% 68%,
+    4% 53%,
+    2% 39%
+  );
+          clip-path: polygon(
+    5% 19%,
+    32% 32%,
+    65% 39%,
+    83% 38%,
+    98% 48%,
+    90% 65%,
+    78% 64%,
+    66% 77%,
+    56% 69%,
+    47% 67%,
+    32% 72%,
+    19% 76%,
+    8% 68%,
+    4% 53%,
+    2% 39%
+  );
+}
+
+.body-container.mars::after {
+  translate: -70% -40%;
+  width: calc(var(--size) / 2.6);
+  height: calc(var(--size) / 3.5);
+  -webkit-clip-path: polygon(
+    5% 19%,
+    32% 32%,
+    65% 39%,
+    83% 38%,
+    98% 48%,
+    90% 65%,
+    78% 64%,
+    66% 77%,
+    56% 69%,
+    47% 67%,
+    32% 72%,
+    19% 76%,
+    8% 68%,
+    4% 53%,
+    2% 39%
+  );
+          clip-path: polygon(
+    5% 19%,
+    32% 32%,
+    65% 39%,
+    83% 38%,
+    98% 48%,
+    90% 65%,
+    78% 64%,
+    66% 77%,
+    56% 69%,
+    47% 67%,
+    32% 72%,
+    19% 76%,
+    8% 68%,
+    4% 53%,
+    2% 39%
+  );
+}
+
+.body.jupiter {
+  --size: 5dvmin;
+  --color-1: #9f938f;
+  --color-2: #321;
+  --astronomical-unit: calc(var(--jupiter-orbit-size) / 2);
+  --orbit-progress: .4;
+  overflow: hidden;
+}
+
+.body.jupiter::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background:
+    radial-gradient(
+      ellipse 140% 100% at center -5%,
+      transparent 38%,
+      #6526 41%,
+      #6526 44%,
+      transparent 45%,
+      transparent 46%,
+      #652a 46%,
+      #652a 52%,
+      transparent 53%,
+      transparent 58%,
+      #652a 60%,
+      #652a 66%,
+      transparent 67%
+    );
+  background-size: 200% 200%;
+  background-position: center center;
+  mix-blend-mode: soft-light;
+}
+
+.body.jupiter::before {
+  --great-red-spot-width: calc(var(--size) / 10);
+  --great-red-spot-height: calc(var(--size) / 12);
+  content: "";
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  border-radius: 50%;
+  box-shadow: inset 0 0 calc(var(--size) / 2) var(--color-1);
+  background:
+    radial-gradient(
+      ellipse
+      var(--great-red-spot-width)
+      var(--great-red-spot-height)
+      at 70% 68%,
+      #5329, transparent
+    ),
+    radial-gradient(
+      ellipse
+      calc(var(--great-red-spot-width) / 2.5)
+      calc(var(--great-red-spot-height) / 2.5)
+      at 80% 60%,
+      #fec6, transparent
+    ),
+    radial-gradient(
+      ellipse
+      calc(var(--great-red-spot-width) / 2.3)
+      calc(var(--great-red-spot-height) / 2.3)
+      at 45% 63%,
+      #fec6, transparent
+    ),
+    radial-gradient(
+      ellipse
+      calc(var(--great-red-spot-width) / 2.1)
+      calc(var(--great-red-spot-height) / 2.1)
+      at 30% 36%,
+      #fec6, transparent
+    );
+  background-size: 200% 100%;
+  background-position: center center;
+  mix-blend-mode: overlay;
+  -webkit-animation:
+    jupiter-clouds
+    var(--day) calc(var(--day) / -1.2)
+    linear infinite;
+          animation:
+    jupiter-clouds
+    var(--day) calc(var(--day) / -1.2)
+    linear infinite;
+}
+
+@-webkit-keyframes jupiter-clouds {
+  from {
+    background-position-x: left;
+  }
+  to {
+    background-position-x: -200%;
+  }
+}
+
+@keyframes jupiter-clouds {
+  from {
+    background-position-x: left;
+  }
+  to {
+    background-position-x: -200%;
+  }
+}
+
+/*
+ * 3D rings trick is from my old CSS Saturn:
+ * https://codepen.io/pavlovsk/pen/xOmdBO
+ */
+.body-container.saturn {
+  --size: 5dvmin;
+  --color-1: #cb9;
+  --color-2: #531;
+  --astronomical-unit: calc(var(--saturn-orbit-size) / 2);
+  --orbit-progress: .1;
+  --ring-a-size: 180%;
+  --ring-a-color: var(--color-1);
+  --ring-b-size: 200%;
+  --ring-b-color: var(--color-1);
+}
+
+.body-container.saturn .body-copy,
+.body-container.saturn .storms {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: inherit;
+  border-radius: inherit;
+}
+
+.body-container.saturn .storms {
+  overflow: hidden;
+}
+
+.body-container.saturn .storm {
+  position: absolute;
+  width: var(--size);
+  height: var(--size);
+  top: 0;
+  left: 50%;
+  translate: -50% var(--y);
+  rotate: x var(--pov);
+  border-radius: inherit;
+  mix-blend-mode: overlay;
+  -webkit-clip-path: polygon(0 50%, 100% 50%, 100% 100%, 0 100%);
+          clip-path: polygon(0 50%, 100% 50%, 100% 100%, 0 100%);
+  background: var(--bg);
+  filter: blur(var(--fuzz));
+}
+
+.body-container.saturn .storm:nth-child(1) {
+  --y: -60%;
+  --fuzz: .1dvmin;
+  --bg: radial-gradient(
+    circle at center,
+    transparent 20%,
+    #1323 40%,
+    transparent
+  );
+}
+
+.body-container.saturn .storm:nth-child(2) {
+  --y: -35%;
+  --fuzz: .1dvmin;
+  --bg: radial-gradient(
+    circle at center,
+    transparent 55%,
+    #3213
+  );
+}
+
+.body-container.saturn .storm:nth-child(3) {
+  --y: -15%;
+  --fuzz: .25dvmin;
+  --bg: radial-gradient(
+    circle at center,
+    transparent 25%,
+    #fed2
+  );
+}
+
+.body-container.saturn::before,
+.body-container.saturn::after,
+.body-container.saturn .ring-far {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  rotate: x var(--pov);
+  border-radius: 50%;
+}
+
+.body-container.saturn::before,
+.body-container.saturn::after {
+  content: "";
+  z-index: 1;
+  translate: -50% -50%;
+  -webkit-clip-path: polygon(
+    0 100%,
+    100% 100%,
+    100% 50%,
+    0 50%
+  );
+          clip-path: polygon(
+    0 100%,
+    100% 100%,
+    100% 50%,
+    0 50%
+  );
+}
+
+.body-container.saturn .ring-far {
+  translate: -50% -49%;
+  -webkit-clip-path: polygon(
+    0 0,
+    100% 0,
+    100% 50%,
+    0 50%
+  );
+          clip-path: polygon(
+    0 0,
+    100% 0,
+    100% 50%,
+    0 50%
+  );
+}
+
+.body-container.saturn::before,
+.body-container.saturn .ring-far.a {
+  width: var(--ring-a-size);
+  height: var(--ring-a-size);
+  background: radial-gradient(
+    circle calc(var(--size) / 1.5) at center,
+    #0000 99.9%,
+    var(--ring-a-color)
+  );
+}
+
+.body-container.saturn::after,
+.body-container.saturn .ring-far.b {
+  width: var(--ring-b-size);
+  height: var(--ring-b-size);
+  background: radial-gradient(
+    circle calc(var(--size) / 1.05) at center,
+    #0000 99.9%,
+    var(--ring-b-color)
+  );
+}
+
+.body-container.saturn .shadow {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  left: 50%;
+  background: radial-gradient(
+    ellipse
+      calc(var(--size) / 1.4)
+      calc(var(--size) / 1.4 * 3)
+      at center,
+    #0000 18%,
+    #000 18.1%
+  );
+  width: 100%;
+  height: 75%;
+  transform-style: preserve-3d;
+  transform-origin: left center;
+  rotate: x var(--pov);
+  translate: 0 -50%;
+  border-radius: 30%;
+  border-top-right-radius: 50% 90%;
+  border-bottom-right-radius: 50% 90%;
+  -webkit-clip-path: polygon(
+    50% 0,
+    100% 0,
+    100% 100%,
+    50% 100%
+  );
+          clip-path: polygon(
+    50% 0,
+    100% 0,
+    100% 100%,
+    50% 100%
+  );
+  -webkit-animation:
+    saturn-shadow
+    var(--day)
+    -2s
+    linear infinite;
+          animation:
+    saturn-shadow
+    var(--day)
+    -2s
+    linear infinite;
+}
+
+@-webkit-keyframes saturn-shadow {
+  from, 40%, to {
+    opacity: 0.8;
+  }
+  50%, 90% {
+    opacity: 0.7;
+  }
+  to {
+    transform: rotateZ(-1turn);
+  }
+  7.8%, 43.5% {
+    z-index: 0;
+  }
+  43.6% {
+    z-index: 2;
+  }
+}
+
+@keyframes saturn-shadow {
+  from, 40%, to {
+    opacity: 0.8;
+  }
+  50%, 90% {
+    opacity: 0.7;
+  }
+  to {
+    transform: rotateZ(-1turn);
+  }
+  7.8%, 43.5% {
+    z-index: 0;
+  }
+  43.6% {
+    z-index: 2;
+  }
+}
+
+.body-container.nebula {
+  --size: .25dvmin;
+  --color-1: white;
+  --color-2: white;
+  --astronomical-unit: calc(var(--stars-orbit-size) / 2);
+  --orbit-progress: .85;
+  --part-width: calc(var(--size) * 30);
+  --part-height: calc(var(--size) * 20);
+  --center-size: calc(var(--size) * 40);
+  --part-bg-1: #4ad8;
+  --part-bg-2: #b50a;
+  --part-bg-3: #ec2a;
+}
+
+.body-container.nebula .body-copy {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: inherit;
+  width: 100%;
+  height: 100%;
+  width: var(--center-size);
+  height: var(--center-size);
+  translate: -50% -50%;
+  background: inherit;
+  background:
+    radial-gradient(
+      ellipse
+        calc(var(--center-size) / 1.25)
+        calc(var(--center-size) / 2)
+        at center,
+      transparent 20%,
+      #fff3,
+      transparent 60%
+    );
+}
+
+.body-container.nebula .body-copy::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: calc(var(--size));
+  height: calc(var(--size));
+  -webkit-animation: nebula-stars-twinkle 3s linear infinite;
+          animation: nebula-stars-twinkle 3s linear infinite;
+}
+
+@-webkit-keyframes nebula-stars-twinkle {
+  from, 27%, 40%, 60%, 73%, to {
+    box-shadow:
+      -2dvmin -1.1dvmin 0 #fff2,
+      -3.4dvmin -1dvmin 0 #fff4,
+      -1.5dvmin -.5dvmin 0 #fff3,
+      -1dvmin 1.3dvmin 0 #fff4,
+      -4.2dvmin 1dvmin 0 #fff1,
+      -1.5dvmin .5dvmin 0 #fff1,
+      .6dvmin -.6dvmin 0 #fff2,
+      1.9dvmin -1.4dvmin 0 #fff3,
+      2.5dvmin -1dvmin 0 #fff4,
+      1.5dvmin .5dvmin 0 #fff5,
+      1.8dvmin 1.25dvmin 0 #fff2,
+      3dvmin .9dvmin 0 #fff3;
+  }
+  33%, 66% {
+    box-shadow:
+      -2dvmin -1.1dvmin 0 #fff4,
+      -3.4dvmin -1dvmin 0 #fff5,
+      -1.5dvmin -.5dvmin 0 #fff4,
+      -1dvmin 1.3dvmin 0 #fff2,
+      -4.2dvmin 1dvmin 0 #fff2,
+      -1.5dvmin .5dvmin 0 #fff4,
+      .6dvmin -.6dvmin 0 #fff6,
+      1.9dvmin -1.4dvmin 0 #fff4,
+      2.5dvmin -1dvmin 0 #fff5,
+      1.5dvmin .5dvmin 0 #fff3,
+      1.8dvmin 1.25dvmin 0 #fff4,
+      3dvmin .9dvmin 0 #fff7;
+  }
+}
+
+@keyframes nebula-stars-twinkle {
+  from, 27%, 40%, 60%, 73%, to {
+    box-shadow:
+      -2dvmin -1.1dvmin 0 #fff2,
+      -3.4dvmin -1dvmin 0 #fff4,
+      -1.5dvmin -.5dvmin 0 #fff3,
+      -1dvmin 1.3dvmin 0 #fff4,
+      -4.2dvmin 1dvmin 0 #fff1,
+      -1.5dvmin .5dvmin 0 #fff1,
+      .6dvmin -.6dvmin 0 #fff2,
+      1.9dvmin -1.4dvmin 0 #fff3,
+      2.5dvmin -1dvmin 0 #fff4,
+      1.5dvmin .5dvmin 0 #fff5,
+      1.8dvmin 1.25dvmin 0 #fff2,
+      3dvmin .9dvmin 0 #fff3;
+  }
+  33%, 66% {
+    box-shadow:
+      -2dvmin -1.1dvmin 0 #fff4,
+      -3.4dvmin -1dvmin 0 #fff5,
+      -1.5dvmin -.5dvmin 0 #fff4,
+      -1dvmin 1.3dvmin 0 #fff2,
+      -4.2dvmin 1dvmin 0 #fff2,
+      -1.5dvmin .5dvmin 0 #fff4,
+      .6dvmin -.6dvmin 0 #fff6,
+      1.9dvmin -1.4dvmin 0 #fff4,
+      2.5dvmin -1dvmin 0 #fff5,
+      1.5dvmin .5dvmin 0 #fff3,
+      1.8dvmin 1.25dvmin 0 #fff4,
+      3dvmin .9dvmin 0 #fff7;
+  }
+}
+
+.body-container.nebula .part {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: calc(-50% + var(--part-distance)) -50%;
+  width: var(--part-width);
+  height: var(--part-height);
+  border-radius: 100%;
+  filter: blur(.2dvmin);
+  background:
+    linear-gradient(
+      var(--part-side),
+      var(--part-bg-1) 15%,
+      var(--part-bg-2),
+      transparent
+    ),
+    linear-gradient(
+      to bottom,
+      var(--part-bg-3),
+      transparent 20%,
+      transparent 80%,
+      var(--part-bg-3)
+    ),
+    radial-gradient(
+      circle at center,
+      transparent 50%,
+      var(--part-bg-3)
+    );
+}
+
+.body-container.nebula .part.a {
+  --part-side: to left;
+  --part-distance: -20%;
+}
+
+.body-container.nebula .part.b {
+  --part-side: to right;
+  --part-distance: 20%;
+}
+
+/*
+ * If you have come this far, you should check:
+ * https://codepen.io/pavlovsk/pen/gpeYVN
+ * */
+.body-container.galaxy {
+  --size: .5dvmin;
+  --color-1: white;
+  --color-2: white;
+  --astronomical-unit: calc(var(--stars-orbit-size) / 2);
+  --orbit-progress: .35;
+  --evolution-speed: calc(var(--day) / 3);
+  --arm-thickness: .6dvmin;
+}
+
+.body-container.galaxy .body-copy {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: inherit;
+  border-radius: inherit;
+  box-shadow: inset 0 0 var(--size) #5206;
+}
+
+.body-container.galaxy .arms {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  -webkit-animation: galaxy-rotation 5s linear infinite;
+          animation: galaxy-rotation 5s linear infinite;
+}
+
+@-webkit-keyframes galaxy-rotation {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+@keyframes galaxy-rotation {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+.body-container.galaxy .arm {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate:
+    calc(-42% + var(--i) * -15%)
+    calc(-42% + var(--i) * -15%);
+  rotate: calc(var(--i) * 180deg);
+}
+
+.body-container.galaxy .arm-depth {
+  width: calc(var(--size) * 15);
+  height: calc(var(--size) * 15);
+  position: relative;
+  transform: rotate(.4turn);
+  -webkit-animation:
+    galaxy-evolution
+    var(--evolution-speed)
+    ease-in-out infinite;
+          animation:
+    galaxy-evolution
+    var(--evolution-speed)
+    ease-in-out infinite;
+}
+
+@-webkit-keyframes galaxy-evolution {
+  50% {
+    transform: rotate(.6turn);
+  }
+}
+
+@keyframes galaxy-evolution {
+  50% {
+    transform: rotate(.6turn);
+  }
+}
+
+.body-container.galaxy .arm-depth::before {
+  --arm-color: hsl(
+    calc(245 + var(--d) * 20),
+    30%,
+    calc(60% + var(--d) * 5%)
+  );
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-top: var(--arm-thickness) solid var(--arm-color);
+  border-right: var(--arm-thickness) solid var(--arm-color);
+  border-radius: 100%;
+  filter: blur(.2dvmin);
+}
+
+.body-container.galaxy .arm-depth::after {
+  content: "";
+  position: absolute;
+  width: calc(var(--size) / 4);
+  height: calc(var(--size) / 4);
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  border-radius: 50%;
+  box-shadow:
+    .8dvmin 0 2.25dvmin 0 brown,
+    -.8dvmin 0 2.25dvmin 0 brown,
+    0 1.6dvmin 1.25dvmin 0 orange,
+    0 -1.6dvmin 1.25dvmin 0 orange,
+    2.4dvmin 0 .15dvmin 0 white,
+    -2.4dvmin 0 .15dvmin 0 #fe9,
+    0 3.2dvmin .15dvmin 0 white,
+    -1.3dvmin 3dvmin .3dvmin .1dvmin
+      hsla(
+        calc(302 - var(--i) * 70),
+        50%,
+        calc(64.7% + var(--i) * 10%),
+        calc(0.6 / var(--d) - var(--i) / 4)
+      ),
+    -2.3dvmin 2.7dvmin .3dvmin hsl(250, 30%, 70%),
+    -2.8dvmin 2.2dvmin .3dvmin #fa78,
+    0 -3.2dvmin .15dvmin 0 #edf5;
+  -webkit-animation:
+    galaxy-stars-dim
+    var(--evolution-speed)
+    ease-in-out infinite;
+          animation:
+    galaxy-stars-dim
+    var(--evolution-speed)
+    ease-in-out infinite;
+}
+
+@-webkit-keyframes galaxy-stars-dim {
+  15%, 35%, 65%, 85% {
+    opacity: .6;
+  }
+  25%, 75% {
+    opacity: 0;
+  }
+}
+
+@keyframes galaxy-stars-dim {
+  15%, 35%, 65%, 85% {
+    opacity: .6;
+  }
+  25%, 75% {
+    opacity: 0;
+  }
+}
+
+.body-container.galaxy .arm-depth .arm-depth {
+  position: absolute;
+  width: 61.8%;
+  height: 61.8%;
+  bottom: 6%;
+  right: 5%;
+}
+.conta-space{
+  position: absolute;
+  top: 46%;
+  left: 50%;
+  transform: translate(-50% , -50%);
+
+}
+</style>
+
+<style>
+
+
+
+  .cloneable {
+    padding: var(--container-padding);
+    justify-content: center;
+    align-items: center;
+    
+  
+    display: flex;
+    position: relative;
+  }
+  @media (max-width:600px)
+  {
+    .cloneable {
+      height: 300px;
+    }
+  }
+  
+  .looping-words {
+    height: 2.7em;
+    padding-left: .1em;
+    padding-right: .1em;
+    font-size: 11vw;
+    line-height: .9;
+    position: relative;
+  }
+  
+  .looping-words__list {
+    text-align: center;
+    text-transform: uppercase;
+    white-space: nowrap;
+    flex-flow: column;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    font-family: PP Neue Corp, sans-serif;
+    font-weight: 700;
+    list-style: none;
+    display: flex;
+    position: relative;
+  }
+  
+  .looping-words__list.is--primary {
+    color: var(--color-primary);
+  }
+  
+  .looping-words__list.is--gray {
+    color: var(--color-neutral-500);
+  }
+  
+  
+  
+  .looping-words__fade.is--radial {
+    background-image: radial-gradient(circle closest-side at 50% 50%, transparent 64%, var(--color-neutral-400) 93%);
+    width: 140%;
+    display: block;
+    left: -20%;
+  }
+  
+  .looping-words__selector {
+    pointer-events: none;
+    width: 100%;
+    height: .9em;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  .looping-words__edge {
+    border-top: .035em solid var(--color-primary);
+    border-left: .035em solid var(--color-primary);
+    width: .125em;
+    height: .125em;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  
+  .looping-words__edge.is--2 {
+    left: auto;
+    right: 0;
+    transform: rotate(90deg);
+  }
+  
+  .looping-words__edge.is--3 {
+    inset: auto 0 0 auto;
+    transform: rotate(180deg);
+  }
+  
+  .looping-words__edge.is--4 {
+    top: auto;
+    bottom: 0;
+    transform: rotate(270deg);
+  }
+  
+  .looping-words__containers {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .looping-words__p {
+    margin: 0;
+  }
+  
+  @font-face {
+    font-family: 'PP Neue Corp';
+    src: url('https://cdn.prod.website-files.com/6717aac16c9ea22eeef1e79e/6717de2d56e40b921572d2d9_PPNeueCorp-TightUltrabold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+  }
+</style>
+
+<style>
+  :root {
+    --primary: #0b5bc0;
+    --light: #09559b;
+    --dark: #0F172B;
+    --main-transition: .5s;
+    --sec-padding: 48px;
+}
+/* Services */
+.services {
+    padding: 150px 0;
+   
+}
+
+.services .container {
+display: flex;
+justify-content: center;
+align-items: center;
+flex-wrap: wrap;
+gap: 25px;
+}
+
+.services .container .col {
+    background-color: #09559b;
+    width: 300px;
+    padding: 30px 25px;
+    box-shadow: 0 0 45px rgba(0, 0, 0, .08);
+    transition: var(--main-transition);
+    border-radius: 20px;
+}
+
+.services .container .col:hover {
+    background-color: var(--primary);
+    color: #fff !important;
+}
+
+.services .container .col:hover i {
+    color: #fff;
+}
+
+.services .container .col:hover h5 {
+    color: #fff;
+}
+.services .container .col:hover h2 {
+    color: #fff;
+}
+.services .container .col p {
+  line-height: 22px;
+}
+
+.services .container .col i {
+    font-size: 45px;
+    color: var(--primary);
+    transition: var(--main-transition);
+}
+
+.services .container .col h5 {
+    margin: 15px 0 10px;
+    color: var(--dark);
+    transition: var(--main-transition);
+}
+
+/* About */
+.about {
+    padding: var(--sec-padding) 0;
+    
+}
+
+.about .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.about .container .left-imgs {
+    width: 50%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.about .container .left-imgs .image {
+    width: calc(50% - 7.5px);
+    position: relative;
+    border-radius: 3.5px;
+}
+
+.about .container .left-imgs .image img {
+    max-width: 100%;
+    min-height: 100%;
+    border-radius: 3.5px;
+    transition: var(--main-transition);
+}
+
+.about .container .left-imgs .image:nth-child(2) img {
+    max-width: 80%;
+    min-height: 80%;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+}
+
+.about .container .left-imgs .image:nth-child(2) img:hover {
+    max-width: 100%;
+    min-height: 100%;
+}
+
+.about .container .left-imgs .image:nth-child(3) img {
+    max-width: 80%;
+    min-height: 80%;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.about .container .left-imgs .image:nth-child(3) img:hover {
+    max-width: 100%;
+    min-height: 100%;
+}
+
+.about .container .R-cotent {
+    width: 45%;
+    padding: 15px;
+}
+
+.about .container .R-cotent .M-heading h5::before {
+    display: none;
+}
+
+.about .container .R-cotent .wel {
+    color: #fff;
+}
+
+.about .container .R-cotent .wel i {
+    margin: 0 7px;
+    font-size: 45px;
+    color: var(--primary);
+}
+
+.about .container .R-cotent>p {
+    margin: 24px 0;
+}
+
+.about .container .R-cotent .info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+.about .container .R-cotent .info .formation {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    position: relative;
+    padding-left: 20px;
+    ;
+}
+
+.about .container .R-cotent .info .formation::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 5px;
+    background-color: var(--primary);
+}
+
+.about .container .R-cotent .info .formation h1  {
+    color: var(--primary);
+    font-size: 50px;
+}
+
+ .h2-info-web {
+  color: #fff;
+  font-size: 29px;
+ }
+.about .container .R-cotent .info .formation .con h4 {
+    color: #fff;
+}
+
+.about .container .R-cotent button {
+    background-color: var(--primary);
+    border: none;
+    color: #fff;
+    padding: 15px 25px;
+    font-size: 18px;
+    text-transform: uppercase;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: var(--main-transition);
+}
+
+.about .container .R-cotent button:hover {
+    background-color: transparent;
+    color: var(--dark);
+}
+@media (max-width: 992px) {
+    .about .container .R-cotent {
+        width: 100%;
+    }
+    .about .container {
+        flex-direction: column;
+        gap: 30px;
+    }
+    .about .container .left-imgs {
+        width: 100%;
+    }
+    .services .container .col {
+    width: 85%;
+    margin: 0 10px;
+}
+}
+
+</style>
+
+
+<link rel='stylesheet' href='https://slater.app/10324/23333.css'><link rel="stylesheet" >
+
+<body>
+  <h1>-----------------------section 1------------------------------</h1>
+  <section class="cloneable">
+    <div class="looping-words">
+      <div class="looping-words__containers">
+        <ul data-looping-words-list="" class="looping-words__list">
+          <li class="looping-words__list">
+            <p class="looping-words__p">Customization</p>
+          </li>
+          <li class="looping-words__list">
+            <p class="looping-words__p">Speed</p>
+          </li>
+          <li class="looping-words__list">
+            <p class="looping-words__p">Responsive</p>
+          </li>
+          <li class="looping-words__list">
+            <p class="looping-words__p">Simplicity</p>
+          </li>
+          <li class="looping-words__list">
+            <p class="looping-words__p">Security</p>
+          </li>
+        </ul>
+      </div>
+      <div class="looping-words__fade"></div>
+      <div data-looping-words-selector="" class="looping-words__selector">
+        <div class="looping-words__edge"></div>
+        <div class="looping-words__edge is--2"></div>
+        <div class="looping-words__edge is--3"></div>
+        <div class="looping-words__edge is--4"></div>
+      </div>
+    </div>
+</section>
+<h1>-----------------------section 2-----------------------------</h1>
+<h1>-----------------------section 2-----------------------------</h1>
+
+  <div class="universe">
+    <div id='w'>
+      <canvas id="space"  > 
+        
+        
+      </canvas>
+      <a href="#" id="warp">
+        
+      </a>
+    </div>
+    
+ <div class="conta-space">
+  <div class="orbit moon"></div>
+  <div class="orbit mercury"></div>
+  <div class="orbit venus"></div>
+  <div class="orbit sun"></div>
+  <div class="orbit mars"></div>
+  <div class="orbit jupiter"></div>
+  <div class="orbit saturn"></div>
+  
+ 
+  <div class="orbit stars">
+    <div class="star" style="--j:0; --y:.1"></div>
+    <div class="star" style="--j:1; --y:.5"></div>
+    <div class="star" style="--j:2; --y:.2"></div>
+    <div class="star" style="--j:3; --y:.1"></div>
+    <div class="star" style="--j:4; --y:.6"></div>
+    <div class="star" style="--j:5; --y:.2"></div>
+    <div class="star" style="--j:6; --y:.9"></div>
+    <div class="star" style="--j:7; --y:.4"></div>
+    <div class="star" style="--j:8; --y:.3"></div>
+    <div class="star" style="--j:9; --y:.5"></div>
+    <div class="star" style="--j:10; --y:.3"></div>
+    <div class="star" style="--j:11; --y:.4"></div>
+    <div class="star" style="--j:12; --y:.7"></div>
+    <div class="star" style="--j:13; --y:.8"></div>
+    <div class="star" style="--j:14; --y:.1"></div>
+    <div class="star" style="--j:15; --y:.2"></div>
+    <div class="star" style="--j:16; --y:.9"></div>
+    <div class="star" style="--j:17; --y:.4"></div>
+    <div class="star" style="--j:18; --y:.3"></div>
+    <div class="star" style="--j:19; --y:.5"></div>
+    <div class="star" style="--j:20; --y:.9"></div>
+    <div class="star" style="--j:21; --y:.2"></div>
+    <div class="star" style="--j:22; --y:.6"></div>
+    <div class="star" style="--j:23; --y:.2"></div>
+    <div class="star" style="--j:24; --y:.8"></div>
+    <div class="star" style="--j:25; --y:.7"></div>
+    <div class="star" style="--j:26; --y:.1"></div>
+    <div class="star" style="--j:27; --y:.3"></div>
+    <div class="star" style="--j:28; --y:.4"></div>
+    <div class="star" style="--j:29; --y:.7"></div>
+    <div class="star" style="--j:30; --y:.8"></div>
+    <div class="star" style="--j:31; --y:.3"></div>
+    <div class="star" style="--j:32; --y:.4"></div>
+    <div class="star" style="--j:33; --y:.7"></div>
+    <div class="star" style="--j:34; --y:.8"></div>
+    <div class="star" style="--j:35; --y:.1"></div>
+    <div class="star" style="--j:36; --y:.2"></div>
+    <div class="star" style="--j:37; --y:.9"></div>
+    <div class="star" style="--j:38; --y:.4"></div>
+    <div class="star" style="--j:39; --y:.3"></div>
+    <div class="star" style="--j:40; --y:.2"></div>
+    <div class="star" style="--j:41; --y:.8"></div>
+    <div class="star" style="--j:42; --y:.7"></div>
+    <div class="star" style="--j:43; --y:.1"></div>
+  </div>
+  <div class="body-container earth">
+    <img src="https://streamcreations.com/wp-content/uploads/2024/11/cropped-cropped-cropped-S-1-32x32.png" width="30px" alt="">
+  </div>
+  <div class="body-container moon">
+    <div class="crater crater-1"></div>
+    <div class="crater crater-2"></div>
+    <div class="crater crater-3"></div>
+    <div class="crater crater-4"></div>
+    <div class="crater crater-5"></div>
+    <div class="crater crater-6"></div>
+  </div>
+  <div class="body-container mercury">
+    <div class="crater crater-1"></div>
+    <div class="crater crater-2"></div>
+    <div class="crater crater-3"></div>
+    <div class="crater crater-4"></div>
+    <div class="crater crater-5"></div>
+    <div class="crater crater-6"></div>
+    <div class="crater crater-7"></div>
+    <div class="crater crater-8"></div>
+    <div class="crater crater-9"></div>
+    <div class="crater crater-10"></div>
+    <div class="crater crater-11"></div>
+    <div class="crater crater-12"></div>
+    <div class="crater crater-13"></div>
+    <div class="crater crater-14"></div>
+    <div class="crater crater-15"></div>
+    <div class="crater crater-16"></div>
+  </div>
+  <div class="body venus"></div>
+  <div class="body sun"></div>
+  <div class="body-container mars">
+    <div class="ice-cap"></div>
+  </div>
+  <div class="body jupiter"></div>
+  <div class="body-container saturn">
+    <div class="ring-far a"></div>
+    <div class="ring-far b"></div>
+    <div class="shadow"></div>
+    <div class="body-copy"></div>
+    <div class="storms">
+      <div class="storm"></div>
+      <div class="storm"></div>
+      <div class="storm"></div>
+    </div>
+  </div>
+  <div class="body-container nebula">
+    <div class="part a"></div>
+    <div class="part b"></div>
+    <div class="body-copy"></div>
+  </div>
+  <div class="body-container galaxy">
+    <div class="arms">
+      <div class="arm">
+        <div class="arm-depth" style="--d: 0">
+          <div class="arm-depth" style="--d: 1">
+            <div class="arm-depth" style="--d: 2">
+              <div class="arm-depth" style="--d: 3">
+                <div class="arm-depth" style="--d: 4">
+                  <div class="arm-depth" style="--d: 5">
+                    <div class="arm-depth" style="--d: 6">
+                                                    </div>
+                                                  </div>
+                                               </div>
+                                            </div>
+                                      </div>
+                              </div>
+                    </div>
+      </div>
+      <div class="arm">
+        <div class="arm-depth" style="--d: 0">
+          <div class="arm-depth" style="--d: 1">
+            <div class="arm-depth" style="--d: 2">
+              <div class="arm-depth" style="--d: 3">
+                <div class="arm-depth" style="--d: 4">
+                  <div class="arm-depth" style="--d: 5">
+                    <div class="arm-depth" style="--d: 6">
+                                                    </div>
+                                                  </div>
+                                               </div>
+                                            </div>
+                                      </div>
+                              </div>
+                    </div>
+      </div>
+    </div>
+    <div class="body-copy"></div>
+  </div>
+ </div>
+</div>
+
+<h1>-----------------------section 3------------------------------</h1>
+
+<div class="services" id="service">
+  <div class="container">
+      <div class="col">
+        <h2 class="h2-info-web">E-commerce</h2>
+          <h5>Green Choices, Great Business</h5>
+          <p> Building custom e-commerce websites using Shopify, WordPress, and Salla to deliver innovative and tailored business solutions.</p>
+      </div>
+      <div class="col">
+          <h2 class="h2-info-web">InfoService </h2>
+          <h5> Insight Meets Action</h5>
+          <p>Connecting businesses to valuable data, resources, and service solutions for smarter decision-making.</p>
+      </div>
+      <div class="col">
+          <h2 class="h2-info-web">SmartFlow</h2>
+          <h5>The System Behind Success</h5>
+          <p> A dynamic web-based system designed to streamline business operations and enhance productivity.</p>
+      </div>
+      <div class="col">
+        <h2 class="h2-info-web">TechSavvy</h2>
+        <h5>Powering Growth Through Innovation</h5>
+        <p> uture-proof your business with technology-driven solutions tailored to your unique needs.</p>
+    </div>
+
+  </div>
+</div>
+
+
+<h1>-----------------------section 4------------------------------</h1>
+<!-- About -->
+<div class="about" id="about">
+  <div class="container">
+      <div class="left-imgs">
+          <div class="image">
+              <img src="./img/1.jpg" alt="">
+          </div>
+          <div class="image">
+              <img src="./img/2.jpg" alt="">
+          </div>
+          <div class="image">
+              <img src="./img/3.jpg" alt="">
+          </div>
+          <div class="image">
+              <img src="./img/4.jpg" alt="">
+          </div>
+      </div>
+      <div class="R-cotent">
+          <div class="M-heading">
+              <h5>Stream Creations</h5>
+          </div>
+          <h1 class="wel">
+            Innovative E-Commerce Solutions for Modern Businesses
+          </h1>
+          <p>Creating powerful online stores with Shopify, WordPress, and Salla to drive growth and deliver exceptional shopping experiences.t</p>
+
+          <div class="info">
+              <div class="formation">
+                  <h1>10</h1>
+                  <div class="con">
+                      <span>Years of</span>
+                      <h4>EXPERIENCE</h4>
+                  </div>
+              </div>
+              <div class="formation">
+                  <h1>87</h1>
+                  <div class="con">
+                      <span>Clients</span>
+                      <h4>Partners Success</h4>
+                  </div>
+              </div>
+          </div>
+         <a href="https://streamcreations.com/contact/">
+          <button>Contact Us</button>
+         </a>
+      </div>
+  </div>
+</div>
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<!-- partial -->
+  <script  >
+    // ------- Osmo [https://osmo.supply/] ------- //
+
+document.addEventListener('DOMContentLoaded', function() {
+  const wordList = document.querySelector('[data-looping-words-list]');
+  const words = Array.from(wordList.children);
+  const totalWords = words.length;
+  const wordHeight = 100 / totalWords; // Offset as a percentage
+  const edgeElement = document.querySelector('[data-looping-words-selector]');
+  let currentIndex = 0;
+  function updateEdgeWidth() {
+    const centerIndex = (currentIndex + 1) % totalWords;
+    const centerWord = words[centerIndex];
+    const centerWordWidth = centerWord.getBoundingClientRect().width;
+    const listWidth = wordList.getBoundingClientRect().width;
+    const percentageWidth = (centerWordWidth / listWidth) * 100;
+    gsap.to(edgeElement, {
+      width: `${percentageWidth}%`,
+      duration: 0.5,
+      ease: 'Expo.easeOut',
+    });
+  }
+  function moveWords() {
+    currentIndex++;
+    gsap.to(wordList, {
+      yPercent: -wordHeight * currentIndex,
+      duration: 1.2,
+      ease: 'elastic.out(1, 0.85)',
+      onStart: updateEdgeWidth,
+      onComplete: function() {
+        if (currentIndex >= totalWords - 3) {
+          wordList.appendChild(wordList.children[0]);
+          currentIndex--;
+          gsap.set(wordList, { yPercent: -wordHeight * currentIndex });
+          words.push(words.shift());
+        }
+      }
+    });
+  }
+  updateEdgeWidth();
+  gsap.timeline({ repeat: -1, delay: 1 })
+    .call(moveWords)
+    .to({}, { duration: 2 })
+    .repeat(-1);
+});
+  </script>
+
+
+  <script >
+    //based on an Example by @curran
+window.requestAnimFrame = (function(){   return  window.requestAnimationFrame})();
+var canvas = document.getElementById("space");
+var c = canvas.getContext("2d");
+
+var numStars = 1900;
+var radius = '0.'+Math.floor(Math.random() * 9) + 1  ;
+var focalLength = canvas.width *2;
+var warp = 0;
+var centerX, centerY;
+
+var stars = [], star;
+var i;
+
+var animate = true;
+
+initializeStars();
+
+function executeFrame(){
+  
+  if(animate)
+    requestAnimFrame(executeFrame);
+  moveStars();
+  drawStars();
+}
+
+function initializeStars(){
+  centerX = canvas.width / 2;
+  centerY = canvas.height / 2;
+  
+  stars = [];
+  for(i = 0; i < numStars; i++){
+    star = {
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      z: Math.random() * canvas.width,
+      o: '0.'+Math.floor(Math.random() * 99) + 1
+    };
+    stars.push(star);
+  }
+}
+
+function moveStars(){
+  for(i = 0; i < numStars; i++){
+    star = stars[i];
+    star.z--;
+    
+    if(star.z <= 0){
+      star.z = canvas.width;
+    }
+  }
+}
+
+function drawStars(){
+  var pixelX, pixelY, pixelRadius;
+  
+  // Resize to the screen
+  if(canvas.width != window.innerWidth || canvas.width != window.innerWidth){
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    initializeStars();
+  }
+  if(warp==0)
+  {c.fillStyle = "rgba(0,10,20,1)";
+  c.fillRect(0,0, canvas.width, canvas.height);}
+  
+  for(i = 0; i < numStars; i++){
+    star = stars[i];
+    
+    pixelX = (star.x - centerX) * (focalLength / star.z);
+    pixelX += centerX;
+    pixelY = (star.y - centerY) * (focalLength / star.z);
+    pixelY += centerY;
+    pixelRadius = 1 * (focalLength / star.z);
+    
+    c.fillRect(pixelX, pixelY, pixelRadius, pixelRadius);
+    c.fillStyle = "rgba(209, 255, 255, "+star.o+")";
+    //c.fill();
+  }
+}
+
+
+
+executeFrame();
+  </script>
+
+</body>
+</html>
